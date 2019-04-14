@@ -15,7 +15,7 @@ public class LRUCache implements Cache {
 
     public LRUCache(int maxSize) {
         this.maxSize = maxSize;
-        this.nodeAccessMap = new HashMap<Object, Node>(maxSize );
+        this.nodeAccessMap = new HashMap<Object, Node>(maxSize);
         this.priorityList = new DoublyLinkedList();
         this.currentSize = 0;
     }
@@ -29,7 +29,11 @@ public class LRUCache implements Cache {
         if (this.nodeAccessMap.get(key) == null) {
             return null;
         }
+
+        // Get Node from the linked
         Node node = this.nodeAccessMap.get(key);
+
+        // Move the node into begining on DLL
         updateLL(node);
         return node.getValue();
     }
@@ -39,7 +43,9 @@ public class LRUCache implements Cache {
             throw new IllegalArgumentException("Key already present");
         }
         Node newNode = new Node(key,value);
+        // Cache is full
         if (this.currentSize == this.maxSize) {
+            // Delete last node in the list and remove entry from hashmap
             Node oldestNode =
                     this.priorityList.deleteLastNode();
             this.nodeAccessMap.remove(oldestNode.getKey());

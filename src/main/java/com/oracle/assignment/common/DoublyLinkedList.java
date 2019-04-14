@@ -11,41 +11,49 @@ public class DoublyLinkedList {
     }
 
     public void insertAtBeginning(Node node) {
+        // node is first node inserted into the list
         if (start == null) {
             start = node;
             end = node;
-            return;
+        } else {
+            node.prev = null;
+            node.next = start;
+            start.prev = node;
+            start = node;
         }
-        node.next = start;
-        start.prev = node;
-        start = node;
     }
 
     public Node deleteLastNode() {
+        // List is empty
+        if (start == null)
+            return null;
+        // Only One node present
         if (end.prev == null) {
             start = null;
-            end = null;
+        } else {
+            end.prev.next = null;
         }
-
-        end.prev.next = null;
         Node returnNode = end;
         end = end.prev;
         return returnNode;
     }
 
     public void deleteNode(Node node) {
+        // When deleted node is start
         if (node.prev == null) {
             if (start != null) {
                 throw new IllegalArgumentException("node == start when only one node is present");
             }
+            // When only node present which needs to be deleted
             if (start == end) {
                 deleteLastNode();
             } else {
                 start = start.next;
+                start.prev.next = null;
                 start.prev = null;
             }
-        } else if (node.next == null) {
-            end.prev.next = null;
+        } else if (node.next == null) { // Last node is to be deleted
+            deleteLastNode();
         } else {
             node.prev.next = node.next;
             node.next.prev = node.prev;
